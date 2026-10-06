@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nyx Craft</title>
+<meta name="description" content="Nyx Craft는 마음을 위로하는 작은 앱을 만드는 1인 개발사입니다.">
+<style>
+  :root {
+    --bg: #faf8f5;
+    --card: #ffffff;
+    --text: #2b2a33;
+    --muted: #6d6b78;
+    --accent: #5b4b8a;
+    --line: #e8e4ee;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #15141c;
+      --card: #1f1d29;
+      --text: #ece9f3;
+      --muted: #a6a2b4;
+      --accent: #b3a4e6;
+      --line: #2e2b3b;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+    line-height: 1.7;
+  }
+  main {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 56px 20px 40px;
+  }
+  header { margin-bottom: 40px; }
+  .brand {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin: 0;
+  }
+  .tagline { color: var(--muted); margin: 6px 0 0; }
+  h2 {
+    font-size: 15px;
+    color: var(--muted);
+    font-weight: 600;
+    margin: 0 0 12px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 32px;
+  }
+  .card h3 { margin: 0 0 6px; font-size: 20px; }
+  .card p { margin: 0 0 18px; color: var(--muted); }
+  .links { display: flex; flex-wrap: wrap; gap: 10px; }
+  .btn {
+    display: inline-block;
+    padding: 10px 16px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .btn.primary { background: var(--accent); color: var(--bg); }
+  .btn.ghost { border: 1px solid var(--line); color: var(--text); }
+  .contact a { color: var(--accent); }
+  footer {
+    color: var(--muted);
+    font-size: 13px;
+    border-top: 1px solid var(--line);
+    padding-top: 20px;
+    margin-top: 16px;
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="brand">Nyx Craft</p>
+    <p class="tagline">마음을 위로하는 작은 앱을 만듭니다.</p>
+  </header>
+
+  <h2>앱</h2>
+  <section class="card">
+    <h3>위로명언 - 오늘의 마음</h3>
+    <p>지금의 감정을 고르면 그 마음에 맞는 위로의 한 줄을 건네는 앱입니다. 마음에 드는 문장은 즐겨찾기와 기록으로 남길 수 있어요.</p>
+    <div class="links">
+      <a class="btn primary" href="https://play.google.com/store/apps/details?id=com.nyxcraft.comfortquotes">Google Play에서 보기</a>
+      <a class="btn ghost" href="https://sites.google.com/view/comfort-quotes/%ED%99%88">개인정보처리방침</a>
+    </div>
+  </section>
+
+  <h2>문의</h2>
+  <section class="contact">
+    <p>앱 이용 중 궁금한 점이나 의견이 있으면 <a href="mailto:edwin82@naver.com">edwin82@naver.com</a>로 연락해 주세요.</p>
+  </section>
+
+  <footer>© 2026 Nyx Craft</footer>
+</main>
+</body>
+</html>
