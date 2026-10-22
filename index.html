@@ -74,6 +74,42 @@
   .btn.primary { background: var(--accent); color: var(--bg); }
   .btn.ghost { border: 1px solid var(--line); color: var(--text); }
   .contact a { color: var(--accent); }
+  /* 앱 / 토스 미니앱 탭 — h2와 같은 글씨, 선택된 탭은 강조색 밑줄 */
+  .tabs {
+    display: flex;
+    gap: 20px;
+    margin: 0 0 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .tab {
+    appearance: none;
+    background: none;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    margin: 0 0 -1px;
+    padding: 0 0 10px;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .tab[aria-selected="true"] { color: var(--text); border-bottom-color: var(--accent); }
+  .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
+  .card h3 .status {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 1px 8px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    vertical-align: 2px;
+  }
+  .card h3 .status.soon { color: var(--muted); }
+  /* 링크가 없는 앱: 버튼 대신 '준비 중' */
+  .btn.soon { border: 1px dashed var(--line); color: var(--muted); cursor: default; }
   footer {
     color: var(--muted);
     font-size: 13px;
@@ -90,7 +126,12 @@
     <p class="tagline">일상에 도움이 되는 작은 앱을 만듭니다.</p>
   </header>
 
-  <h2>앱</h2>
+  <div class="tabs" role="tablist" aria-label="앱 종류">
+    <button class="tab" type="button" role="tab" id="tab-apps" aria-controls="panel-apps" aria-selected="true">앱</button>
+    <button class="tab" type="button" role="tab" id="tab-toss" aria-controls="panel-toss" aria-selected="false" tabindex="-1">토스 미니앱</button>
+  </div>
+
+  <div class="tabpanel" role="tabpanel" id="panel-apps" aria-labelledby="tab-apps">
   <section class="card">
     <h3>위로명언 - 오늘의 마음</h3>
     <p>지금의 감정을 고르면 그 마음에 맞는 위로의 한 줄을 건네는 앱입니다. 460개의 명언을 소리로 듣고, 마음에 드는 문장은 즐겨찾기와 기록으로 남길 수 있어요.</p>
@@ -107,6 +148,39 @@
       <a class="btn ghost" href="outsideweather/privacy.html">개인정보처리방침</a>
     </div>
   </section>
+  </div>
+
+  <!--
+    토스 미니앱 카드. 주소 끝에 #toss를 붙이면 이 탭이 바로 열려요.
+    토스 링크가 아직 없는 앱은 버튼 대신 아래처럼 '준비 중'으로 적어요.
+      <h3>앱 이름<span class="status soon">준비 중</span></h3>
+      <div class="links"><span class="btn soon" aria-disabled="true">준비 중</span></div>
+  -->
+  <div class="tabpanel" role="tabpanel" id="panel-toss" aria-labelledby="tab-toss">
+  <section class="card">
+    <h3>데일리 명언<span class="status">출시</span></h3>
+    <p>하루 한 줄, 마음을 다잡는 명언. 출처를 확인한 명언을 8가지 주제로 모아 매일 아침 알림으로 보내드려요.</p>
+    <div class="links">
+      <a class="btn primary" href="https://tossminiapp.com/s/BCPmVBA7">토스에서 열기</a>
+    </div>
+  </section>
+
+  <section class="card">
+    <h3>자미두수 운세<span class="status">출시</span></h3>
+    <p>자미두수 명반과 사주로 보는 오늘의 운세</p>
+    <div class="links">
+      <a class="btn primary" href="https://tossminiapp.com/s/HV0Earkk">토스에서 열기</a>
+    </div>
+  </section>
+
+  <section class="card">
+    <h3>날씨날씨<span class="status">출시</span></h3>
+    <p>오늘 밖에 나가기 좋은 날인지 날씨와 야외활동 지수로 알려드려요</p>
+    <div class="links">
+      <a class="btn primary" href="https://tossminiapp.com/s/BwRaynqC">토스에서 열기</a>
+    </div>
+  </section>
+  </div>
 
   <h2>문의</h2>
   <section class="contact">
@@ -115,5 +189,40 @@
 
   <footer>© 2026 Nyxcraft</footer>
 </main>
+<script>
+  (function () {
+    var tabs = [].slice.call(document.querySelectorAll('[role="tab"]'));
+    var hashes = { 'tab-apps': '#apps', 'tab-toss': '#toss' };
+
+    function select(tab, updateHash) {
+      tabs.forEach(function (t) {
+        var on = t === tab;
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        t.tabIndex = on ? 0 : -1;
+        document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+      });
+      // 탭을 누르면 주소도 바꿔서 지금 보는 탭을 그대로 공유할 수 있어요. (스크롤은 움직이지 않아요)
+      if (updateHash && location.hash !== hashes[tab.id]) history.replaceState(null, '', hashes[tab.id]);
+    }
+
+    function fromHash() {
+      select(document.getElementById(location.hash === '#toss' ? 'tab-toss' : 'tab-apps'), false);
+    }
+
+    tabs.forEach(function (tab, i) {
+      tab.addEventListener('click', function () { select(tab, true); });
+      tab.addEventListener('keydown', function (e) {
+        var step = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (!step) return;
+        e.preventDefault();
+        var next = tabs[(i + step + tabs.length) % tabs.length];
+        select(next, true);
+        next.focus();
+      });
+    });
+    window.addEventListener('hashchange', fromHash);
+    fromHash();
+  })();
+</script>
 </body>
 </html>
