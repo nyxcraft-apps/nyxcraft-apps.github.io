@@ -34,10 +34,25 @@
     word-break: keep-all;
     overflow-wrap: break-word;
   }
+  .hero {
+    height: 200px;
+    background: #14112b;
+    overflow: hidden;
+  }
+  .hero img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 75% 50%;
+  }
+  @media (min-width: 700px) {
+    .hero { height: 260px; }
+  }
   main {
     max-width: 640px;
     margin: 0 auto;
-    padding: 56px 20px 40px;
+    padding: 40px 20px 40px;
   }
   header { margin-bottom: 40px; }
   .brand {
@@ -125,6 +140,7 @@
 </style>
 </head>
 <body>
+<div class="hero"><img src="hero.svg" alt="별이 빛나는 밤하늘 아래 언덕 풍경"></div>
 <main>
   <header>
     <p class="brand">Nyxcraft</p>
