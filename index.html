@@ -47,6 +47,7 @@
     margin: 0;
   }
   .tagline { color: var(--muted); margin: 6px 0 0; }
+  .tagline-en { color: var(--muted); margin: 2px 0 0; font-size: 14px; }
   h2 {
     font-size: 15px;
     color: var(--muted);
@@ -117,6 +118,10 @@
     padding-top: 20px;
     margin-top: 16px;
   }
+  footer p { margin: 0 0 4px; }
+  footer a { color: var(--accent); }
+  footer .biz-en { margin-top: 8px; }
+  footer .copy { margin-top: 12px; }
 </style>
 </head>
 <body>
@@ -124,6 +129,7 @@
   <header>
     <p class="brand">Nyxcraft</p>
     <p class="tagline">일상에 도움이 되는 작은 앱을 만듭니다.</p>
+    <p class="tagline-en" lang="en">Nyxcraft is an independent app developer based in Seoul, Korea, making small apps for everyday life.</p>
   </header>
 
   <div class="tabs" role="tablist" aria-label="앱 종류">
@@ -195,7 +201,13 @@
     <p>앱 이용 중 궁금한 점이나 의견이 있으면 <a href="mailto:edwin82@naver.com">edwin82@naver.com</a>로 연락해 주세요.</p>
   </section>
 
-  <footer>© 2026 Nyxcraft</footer>
+  <footer>
+    <p>상호: 닉스크래프트 (Nyxcraft) · 사업자등록번호: 119-27-02046</p>
+    <p>주소: 서울특별시 강남구 역삼로 512, 5층 22호 (06186)</p>
+    <p>이메일: <a href="mailto:edwin82@naver.com">edwin82@naver.com</a></p>
+    <p class="biz-en" lang="en">Nyxcraft · 5F, Unit 22, 512 Yeoksam-ro, Gangnam-gu, Seoul 06186, Republic of Korea</p>
+    <p class="copy">© 2026 Nyxcraft</p>
+  </footer>
 </main>
 <script>
   (function () {
