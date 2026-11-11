@@ -1,0 +1,6 @@
+{
+  "v": 1,
+  "baseUrl": "https://outsideweather-proxy.edwin82.workers.dev",
+  "apihubProxy": true,
+  "airkoreaProxy": true
+}
