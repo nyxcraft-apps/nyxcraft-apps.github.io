@@ -4,6 +4,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Nyxcraft</title>
+<script>
+  // 언어 정하기: 저장된 선택 > 주소의 ?lang= > 브라우저 언어 (한국어가 아니면 영어)
+  (function () {
+    var lang = null;
+    try { lang = localStorage.getItem('nyx-lang'); } catch (e) {}
+    var q = /[?&]lang=(ko|en)\b/.exec(location.search);
+    if (q) lang = q[1];
+    if (lang !== 'ko' && lang !== 'en') {
+      lang = /^ko\b/i.test(navigator.language || '') ? 'ko' : 'en';
+    }
+    document.documentElement.lang = lang;
+    document.documentElement.setAttribute('data-lang', lang);
+  })();
+</script>
 <meta name="description" content="Nyxcraft는 일상에 도움이 되는 작은 앱을 만드는 1인 개발사입니다.">
 <style>
   :root {
@@ -61,7 +75,36 @@
     margin: 0;
   }
   .tagline { color: var(--muted); margin: 0; }
-  .tagline-en { color: var(--muted); margin: 2px 0 0; font-size: 13px; line-height: 1.45; }
+  /* 한국어/영어 전환: 고르지 않은 언어의 글은 숨겨요 */
+  html[data-lang="ko"] .en,
+  html[data-lang="en"] .ko { display: none !important; }
+  .hero { position: relative; }
+  .lang-switch {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    padding: 3px;
+    border-radius: 999px;
+    background: rgba(10, 8, 30, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .lang-switch button {
+    appearance: none;
+    border: 0;
+    background: none;
+    color: rgba(255, 255, 255, 0.8);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .lang-switch button[aria-pressed="true"] { background: #ffffff; color: #1a1640; }
+  .lang-switch button:focus-visible { outline: 2px solid #ffffff; outline-offset: 2px; }
   h2 {
     font-size: 15px;
     color: var(--muted);
@@ -135,7 +178,6 @@
   }
   footer p { margin: 0 0 2px; line-height: 1.45; }
   footer a { color: var(--accent); }
-  footer .biz-en { margin-top: 6px; }
   footer .copy { margin-top: 8px; }
 </style>
 <meta name="naver-site-verification" content="2f12106ca53a32d506eb8fad72dee0576f2f3ecc" />
@@ -154,61 +196,76 @@
     <source srcset="hero.webp" type="image/webp">
     <img src="hero.jpg" width="1983" height="404" alt="Nyxcraft — Small apps for a brighter everyday">
   </picture>
+  <div class="lang-switch" role="group" aria-label="언어 선택 / Language">
+    <button type="button" data-set-lang="ko" lang="ko" aria-pressed="false">한국어</button>
+    <button type="button" data-set-lang="en" lang="en" aria-pressed="false">EN</button>
+  </div>
 </div>
 <main>
   <header>
-    <p class="tagline">일상에 도움이 되는 작은 앱을 만듭니다.</p>
-    <p class="tagline-en" lang="en">Nyxcraft is an independent app developer based in Seoul, Korea, making small apps for everyday life.</p>
+    <p class="tagline ko">일상에 도움이 되는 작은 앱을 만듭니다.</p>
+    <p class="tagline en" lang="en">Nyxcraft is an independent app developer based in Seoul, Korea, making small apps for everyday life.</p>
   </header>
 
-  <div class="tabs" role="tablist" aria-label="앱 종류">
-    <button class="tab" type="button" role="tab" id="tab-apps" aria-controls="panel-apps" aria-selected="true">앱</button>
-    <button class="tab" type="button" role="tab" id="tab-toss" aria-controls="panel-toss" aria-selected="false" tabindex="-1">토스 미니앱</button>
+  <div class="tabs" role="tablist" aria-label="앱 종류 / App types">
+    <button class="tab" type="button" role="tab" id="tab-apps" aria-controls="panel-apps" aria-selected="true"><span class="ko">앱</span><span class="en" lang="en">Apps</span></button>
+    <button class="tab" type="button" role="tab" id="tab-toss" aria-controls="panel-toss" aria-selected="false" tabindex="-1"><span class="ko">토스 미니앱</span><span class="en" lang="en">Toss Mini Apps</span></button>
   </div>
 
   <div class="tabpanel" role="tabpanel" id="panel-apps" aria-labelledby="tab-apps">
   <section class="card">
-    <h3>바깥날씨</h3>
-    <p>기상청·에어코리아 자료로 오늘 날씨와 야외활동 점수를 알려 주는 날씨 앱입니다. 시간별·주간 예보, 미세먼지, 자외선, 기상특보 알림과 홈 화면 위젯을 제공해요.</p>
+    <h3><span class="ko">바깥날씨</span><span class="en" lang="en">Outside Weather</span></h3>
+    <p class="ko">기상청·에어코리아 자료로 오늘 날씨와 야외활동 점수를 알려 주는 날씨 앱입니다. 시간별·주간 예보, 미세먼지, 자외선, 기상특보 알림과 홈 화면 위젯을 제공해요.</p>
+    <p class="en" lang="en">A weather app that rates how good today is for outdoor activities, using official data from the Korea Meteorological Administration and AirKorea. It offers hourly and weekly forecasts, fine dust and UV levels, weather warning alerts, and home screen widgets.</p>
     <div class="links">
-      <a class="btn primary" href="https://play.google.com/store/apps/details?id=com.nyxcraft.outsideweather">Google Play에서 보기</a>
-      <a class="btn ghost" href="outsideweather/privacy.html">개인정보처리방침</a>
+      <a class="btn primary ko" href="https://play.google.com/store/apps/details?id=com.nyxcraft.outsideweather">Google Play에서 보기</a>
+      <a class="btn primary en" lang="en" href="https://play.google.com/store/apps/details?id=com.nyxcraft.outsideweather&amp;hl=en">Get it on Google Play</a>
+      <a class="btn ghost" href="outsideweather/privacy.html"><span class="ko">개인정보처리방침</span><span class="en" lang="en">Privacy Policy</span></a>
     </div>
   </section>
 
   <section class="card">
-    <h3>Yipdoku: 강아지 스도쿠 퍼즐</h3>
-    <p>귀여운 강아지들과 산책하며 푸는 논리 퍼즐 게임이에요. 줄마다, 칸마다, 색깔 구역마다 강아지 한 마리씩! 500개 레벨을 깨며 15견종 강아지를 모으고 마당을 꾸며 보세요.</p>
+    <h3><span class="ko">Yipdoku: 강아지 스도쿠 퍼즐</span><span class="en" lang="en">Yipdoku: Puppy Sudoku Puzzle</span></h3>
+    <p class="ko">귀여운 강아지들과 산책하며 푸는 논리 퍼즐 게임이에요. 줄마다, 칸마다, 색깔 구역마다 강아지 한 마리씩! 500개 레벨을 깨며 15견종 강아지를 모으고 마당을 꾸며 보세요.</p>
+    <p class="en" lang="en">A logic puzzle game you solve while walking with adorable puppies. One puppy per row, per column, and per colored area! Clear 500 levels, collect 15 dog breeds, and decorate your yard.</p>
     <div class="links">
-      <a class="btn primary" href="https://play.google.com/store/apps/details?id=com.nyxcraft.yipdoku">Google Play에서 보기</a>
-      <a class="btn ghost" href="yipdoku/privacy.html">개인정보처리방침</a>
+      <a class="btn primary ko" href="https://play.google.com/store/apps/details?id=com.nyxcraft.yipdoku">Google Play에서 보기</a>
+      <a class="btn primary en" lang="en" href="https://play.google.com/store/apps/details?id=com.nyxcraft.yipdoku&amp;hl=en">Get it on Google Play</a>
+      <a class="btn ghost" href="yipdoku/privacy.html"><span class="ko">개인정보처리방침</span><span class="en" lang="en">Privacy Policy</span></a>
     </div>
   </section>
 
   <section class="card">
-    <h3>별빛 벽돌깨기</h3>
-    <p>공을 튕겨 밤하늘의 별빛 벽돌을 깨는 블록 퍼즐 게임이에요. 100개의 스테이지와 매일 바뀌는 오늘의 스테이지에 도전하고, 모은 별로 리더보드 순위를 올려 보세요.</p>
+    <h3><span class="ko">별빛 벽돌깨기</span><span class="en" lang="en">Starlight Bricks</span></h3>
+    <p class="ko">공을 튕겨 밤하늘의 별빛 벽돌을 깨는 블록 퍼즐 게임이에요. 100개의 스테이지와 매일 바뀌는 오늘의 스테이지에 도전하고, 모은 별로 리더보드 순위를 올려 보세요.</p>
+    <p class="en" lang="en">A block puzzle game where you bounce a ball to break starlit bricks across the night sky. Take on 100 stages and a new Daily Stage every day, and collect stars to climb the leaderboard.</p>
     <div class="links">
-      <a class="btn primary" href="https://play.google.com/store/apps/details?id=com.nyxcraft.starbricks">Google Play에서 보기</a>
-      <a class="btn ghost" href="star-bricks/privacy.html">개인정보처리방침</a>
+      <a class="btn primary ko" href="https://play.google.com/store/apps/details?id=com.nyxcraft.starbricks">Google Play에서 보기</a>
+      <a class="btn primary en" lang="en" href="https://play.google.com/store/apps/details?id=com.nyxcraft.starbricks&amp;hl=en">Get it on Google Play</a>
+      <a class="btn ghost ko" href="star-bricks/privacy.html">개인정보처리방침</a>
+      <a class="btn ghost en" lang="en" href="star-bricks/privacy-en.html">Privacy Policy</a>
     </div>
   </section>
 
   <section class="card">
-    <h3>위로명언 - 오늘의 마음</h3>
-    <p>지금의 감정을 고르면 그 마음에 맞는 위로의 한 줄을 건네는 앱입니다. 460개의 명언을 소리로 듣고, 마음에 드는 문장은 즐겨찾기와 기록으로 남길 수 있어요.</p>
+    <h3><span class="ko">위로명언 - 오늘의 마음</span><span class="en" lang="en">Comfort Quotes - Today's Mind</span></h3>
+    <p class="ko">지금의 감정을 고르면 그 마음에 맞는 위로의 한 줄을 건네는 앱입니다. 460개의 명언을 소리로 듣고, 마음에 드는 문장은 즐겨찾기와 기록으로 남길 수 있어요.</p>
+    <p class="en" lang="en">Pick how you're feeling right now, and the app offers a line of comfort that fits your mood. Listen to 460 quotes read aloud, and save your favorites to keep and look back on.</p>
     <div class="links">
-      <a class="btn primary" href="https://play.google.com/store/apps/details?id=com.nyxcraft.comfortquotes">Google Play에서 보기</a>
-      <a class="btn ghost" href="todaysmind/privacy.html">개인정보처리방침</a>
+      <a class="btn primary ko" href="https://play.google.com/store/apps/details?id=com.nyxcraft.comfortquotes">Google Play에서 보기</a>
+      <a class="btn primary en" lang="en" href="https://play.google.com/store/apps/details?id=com.nyxcraft.comfortquotes&amp;hl=en">Get it on Google Play</a>
+      <a class="btn ghost" href="todaysmind/privacy.html"><span class="ko">개인정보처리방침</span><span class="en" lang="en">Privacy Policy</span></a>
     </div>
   </section>
 
   <section class="card">
-    <h3>면역 특공대</h3>
-    <p>면역세포 특공대가 되어 몰려오는 병균 군단을 물리치는 귀여운 디펜스 게임이에요. 룰렛으로 무기를 키우고, 챕터마다 나오는 대왕 병균을 물리쳐 보세요.</p>
+    <h3><span class="ko">면역 특공대</span><span class="en" lang="en">Immune Combat</span></h3>
+    <p class="ko">면역세포 특공대가 되어 몰려오는 병균 군단을 물리치는 귀여운 디펜스 게임이에요. 룰렛으로 무기를 키우고, 챕터마다 나오는 대왕 병균을 물리쳐 보세요.</p>
+    <p class="en" lang="en">A cute defense game where you lead a squad of immune cells against invading germ armies. Power up your weapons with the roulette and defeat the giant boss germ in every chapter.</p>
     <div class="links">
-      <a class="btn primary" href="https://play.google.com/store/apps/details?id=com.nyxcraft.immunecombat">Google Play에서 보기</a>
-      <a class="btn ghost" href="immunecombat/privacy.html">개인정보처리방침</a>
+      <a class="btn primary ko" href="https://play.google.com/store/apps/details?id=com.nyxcraft.immunecombat">Google Play에서 보기</a>
+      <a class="btn primary en" lang="en" href="https://play.google.com/store/apps/details?id=com.nyxcraft.immunecombat&amp;hl=en">Get it on Google Play</a>
+      <a class="btn ghost" href="immunecombat/privacy.html"><span class="ko">개인정보처리방침</span><span class="en" lang="en">Privacy Policy</span></a>
     </div>
   </section>
   </div>
@@ -220,50 +277,58 @@
       <div class="links"><span class="btn soon" aria-disabled="true">준비 중</span></div>
   -->
   <div class="tabpanel" role="tabpanel" id="panel-toss" aria-labelledby="tab-toss">
+  <p class="en tagline" lang="en" style="font-size:13px;margin:0 0 12px">Toss Mini Apps run inside the Toss app and are available in Korea only.</p>
   <section class="card">
-    <h3>데일리 명언<span class="status">출시</span></h3>
-    <p>하루 한 줄, 마음을 다잡는 명언. 출처를 확인한 명언을 8가지 주제로 모아 매일 아침 알림으로 보내드려요.</p>
+    <h3><span class="ko">데일리 명언</span><span class="en" lang="en">Daily Quotes</span><span class="status"><span class="ko">출시</span><span class="en" lang="en">Live</span></span></h3>
+    <p class="ko">하루 한 줄, 마음을 다잡는 명언. 출처를 확인한 명언을 8가지 주제로 모아 매일 아침 알림으로 보내드려요.</p>
+    <p class="en" lang="en">One line a day to steady your mind. Source-checked quotes in 8 themes, delivered as a notification every morning.</p>
     <div class="links">
-      <a class="btn primary" href="https://tossminiapp.com/s/BCPmVBA7">토스에서 열기</a>
+      <a class="btn primary" href="https://tossminiapp.com/s/BCPmVBA7"><span class="ko">토스에서 열기</span><span class="en" lang="en">Open in Toss</span></a>
     </div>
   </section>
 
   <section class="card">
-    <h3>자미두수 운세<span class="status">출시</span></h3>
-    <p>자미두수 명반과 사주로 보는 오늘의 운세</p>
+    <h3><span class="ko">자미두수 운세</span><span class="en" lang="en">Zi Wei Fortune</span><span class="status"><span class="ko">출시</span><span class="en" lang="en">Live</span></span></h3>
+    <p class="ko">자미두수 명반과 사주로 보는 오늘의 운세</p>
+    <p class="en" lang="en">Today's fortune based on your Zi Wei Dou Shu chart and Saju (Four Pillars).</p>
     <div class="links">
-      <a class="btn primary" href="https://tossminiapp.com/s/HV0Earkk">토스에서 열기</a>
+      <a class="btn primary" href="https://tossminiapp.com/s/HV0Earkk"><span class="ko">토스에서 열기</span><span class="en" lang="en">Open in Toss</span></a>
     </div>
   </section>
 
   <section class="card">
-    <h3>날씨날씨<span class="status">출시</span></h3>
-    <p>오늘 밖에 나가기 좋은 날인지 날씨와 야외활동 지수로 알려드려요</p>
+    <h3><span class="ko">날씨날씨</span><span class="en" lang="en">WeatherWeather</span><span class="status"><span class="ko">출시</span><span class="en" lang="en">Live</span></span></h3>
+    <p class="ko">오늘 밖에 나가기 좋은 날인지 날씨와 야외활동 지수로 알려드려요</p>
+    <p class="en" lang="en">Find out whether today is a good day to head outside, with the weather and an outdoor activity index.</p>
     <div class="links">
-      <a class="btn primary" href="https://tossminiapp.com/s/BwRaynqC">토스에서 열기</a>
+      <a class="btn primary" href="https://tossminiapp.com/s/BwRaynqC"><span class="ko">토스에서 열기</span><span class="en" lang="en">Open in Toss</span></a>
     </div>
   </section>
 
   <section class="card">
-    <h3>데일리 불경<span class="status soon">준비 중</span></h3>
-    <p>반야심경·금강경·법구경·법화경·화엄경의 구절을 쉬운 현대어 번역과 해석으로 하루 한 구절씩 만나 보세요.</p>
+    <h3><span class="ko">데일리 불경</span><span class="en" lang="en">Daily Sutra</span><span class="status soon"><span class="ko">준비 중</span><span class="en" lang="en">Coming soon</span></span></h3>
+    <p class="ko">반야심경·금강경·법구경·법화경·화엄경의 구절을 쉬운 현대어 번역과 해석으로 하루 한 구절씩 만나 보세요.</p>
+    <p class="en" lang="en">Meet one verse a day from the Heart Sutra, Diamond Sutra, Dhammapada, Lotus Sutra and Avatamsaka Sutra, with easy modern translations and commentary.</p>
     <div class="links">
-      <span class="btn soon" aria-disabled="true">준비 중</span>
+      <span class="btn soon" aria-disabled="true"><span class="ko">준비 중</span><span class="en" lang="en">Coming soon</span></span>
     </div>
   </section>
   </div>
 
-  <h2>문의</h2>
+  <h2><span class="ko">문의</span><span class="en" lang="en">Contact</span></h2>
   <section class="contact">
-    <p>앱 이용 중 궁금한 점이나 의견이 있으면 <a href="mailto:contact@nyxcraft.co.kr">contact@nyxcraft.co.kr</a>로 연락해 주세요.</p>
+    <p class="ko">앱 이용 중 궁금한 점이나 의견이 있으면 <a href="mailto:contact@nyxcraft.co.kr">contact@nyxcraft.co.kr</a>로 연락해 주세요.</p>
+    <p class="en" lang="en">If you have any questions or feedback about our apps, please email us at <a href="mailto:contact@nyxcraft.co.kr">contact@nyxcraft.co.kr</a>.</p>
   </section>
 
   <footer>
-    <p>상호: 닉스크래프트 (Nyxcraft) · 사업자등록번호: 119-27-02046</p>
-    <p>주소: 서울특별시 강남구 역삼로 512, 5층 22호 (06186)</p>
-    <p>이메일: <a href="mailto:contact@nyxcraft.co.kr">contact@nyxcraft.co.kr</a></p>
-    <p class="biz-en" lang="en">Nyxcraft · 5F, Unit 22, 512 Yeoksam-ro, Gangnam-gu, Seoul 06186, Republic of Korea</p>
-    <p>이 사이트는 방문 통계 분석을 위해 Google 애널리틱스(쿠키)를 사용합니다.</p>
+    <p class="ko">상호: 닉스크래프트 (Nyxcraft) · 사업자등록번호: 119-27-02046</p>
+    <p class="ko">주소: 서울특별시 강남구 역삼로 512, 5층 22호 (06186)</p>
+    <p class="en" lang="en">Company: Nyxcraft · Business Registration No.: 119-27-02046</p>
+    <p class="en" lang="en">Address: 5F, Unit 22, 512 Yeoksam-ro, Gangnam-gu, Seoul 06186, Republic of Korea</p>
+    <p><span class="ko">이메일</span><span class="en" lang="en">Email</span>: <a href="mailto:contact@nyxcraft.co.kr">contact@nyxcraft.co.kr</a></p>
+    <p class="ko">이 사이트는 방문 통계 분석을 위해 Google 애널리틱스(쿠키)를 사용합니다.</p>
+    <p class="en" lang="en">This site uses Google Analytics (cookies) to understand visitor statistics.</p>
     <p class="copy">© 2026 Nyxcraft</p>
   </footer>
 </main>
@@ -300,6 +365,34 @@
     });
     window.addEventListener('hashchange', fromHash);
     fromHash();
+  })();
+
+  // 한국어/영어 전환 스위치
+  (function () {
+    var root = document.documentElement;
+    var buttons = [].slice.call(document.querySelectorAll('[data-set-lang]'));
+    var meta = document.querySelector('meta[name="description"]');
+    var text = {
+      ko: { desc: 'Nyxcraft는 일상에 도움이 되는 작은 앱을 만드는 1인 개발사입니다.' },
+      en: { desc: 'Nyxcraft is an independent app developer based in Seoul, Korea, making small apps for everyday life.' }
+    };
+
+    function apply(lang, save) {
+      root.lang = lang;
+      root.setAttribute('data-lang', lang);
+      buttons.forEach(function (b) {
+        b.setAttribute('aria-pressed', b.getAttribute('data-set-lang') === lang ? 'true' : 'false');
+      });
+      if (meta) meta.setAttribute('content', text[lang].desc);
+      if (save) {
+        try { localStorage.setItem('nyx-lang', lang); } catch (e) {}
+      }
+    }
+
+    buttons.forEach(function (b) {
+      b.addEventListener('click', function () { apply(b.getAttribute('data-set-lang'), true); });
+    });
+    apply(root.getAttribute('data-lang') === 'en' ? 'en' : 'ko', false);
   })();
 </script>
 </body>
